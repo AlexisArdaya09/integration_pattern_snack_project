@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 @Module({
   imports: [
     TransactionsModule,
-    MongooseModule.forRoot('mongodb+srv://alexis:123@cluster0-eaavz.mongodb.net/test?retryWrites=true&w=majority', {
+    MongooseModule.forRoot('mongodb+srv://liyi:123@cluster0-igjwe.mongodb.net/Company_1?retryWrites=true&w=majority', {
       useNewUrlParser: true
     })],
   controllers: [AppController],

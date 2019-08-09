@@ -15,66 +15,43 @@ export class TransactionsController extends RMQController {
                     host: '159.65.220.217:5672',
                 },
             ],
-            queueName: 'transaction_by_user'
+            queueName: 'transaction_by_user',prefetchCount:1
         });
     }
-
-    @Post("/create")
-    async createPost(@Res() res, @Body() createTransactionDTO: CreateTransactionDTO) {
-        const transaction = await this.transactionsService.createTransaction(createTransactionDTO)
-        return res.status(HttpStatus.OK).json({
-            message: 'Transaction Successfully Created',
-            Transaction: transaction
-        })
-    }
-
-    @Get('/')
-    async getTransactions(@Res() res) {
-        const Transactions = await this.transactionsService.getTransactions()
-        res.status(HttpStatus.OK).json({
-            Transactions
-        })
-    }
-
     
     @Get('/:uuid')
     async getTransactionsByUUID(@Res() res, @Param('uuid') uuid) {
         try {
-            this.send<number[], number>('my_exchange1', [1, 2, 3]).then(reply => {
-                console.log(reply)
-            }).catch(function (err) {
-                console.log("Promise  ",err);
-           });
-            const Transaction = await this.transactionsService.getTransactionByUUID(uuid);
-            if (!Transaction) throw new NotFoundException('Transactions does not exists');
-            return res.status(HttpStatus.OK).json(Transaction);
+            this.publishMessage('company_1', uuid);
+            this.publishMessage('company_2', uuid);
+            this.publishMessage('main_company', uuid);
+            
+            const msg = "Message request data sent successfully"
+            console.log(msg)
+            return res.status(HttpStatus.OK).json({msg});
         } catch (err) {
             console.log(err)
         }
     }
 
-    @RMQRoute('my_exchange2')
-    sum(numbers: string): string {
-        return numbers
+    publishMessage(rooute,uuid){
+        let data = [];
+        let responseVerify= [];
+        this.send<string, string>(rooute, uuid).then(reply => {
+            this.responseData(reply,data,responseVerify)
+            
+        }).catch(function (err) { 
+            console.log("Fallo", err); 
+        });
     }
 
-    @Delete('/')
-    async deleleTransaction(@Res() res, @Query('TransactionID') TransactionID) {
-        const TransactionDeleted = await this.transactionsService.deleteTransaction(TransactionID)
-        if (!TransactionDeleted) throw new NotFoundException('Transaction does not exists');
-        return res.status(HttpStatus.OK).json({
-            message: "Transaction deleted succesful",
-            TransactionDeleted
-        })
-    }
-
-    @Put('/')
-    async updateTransaction(@Res() res, @Body() createTransactionDTO: CreateTransactionDTO, @Query('TransactionID') TransactionID) {
-        const TransactionUpdated = await this.transactionsService.updateTransaction(TransactionID, createTransactionDTO)
-        if (!TransactionUpdated) throw new NotFoundException('Transaction does not exists');
-        return res.status(HttpStatus.OK).json({
-            message: "Transaction updated succesful",
-            TransactionUpdated
-        })
+    responseData(reply,data, responseVerify){
+        if (reply != "Not found"){
+            data.push(reply)
+            responseVerify.push(true)
+        }
+        if (responseVerify.lenght > 0){
+            console.log(data)
+        }
     }
 }

@@ -14,10 +14,10 @@ export class TransactionsController extends RMQController {
                     password: 'Password123',
                     host: '159.65.220.217:5672',
                 },
-            ],
-            queueName: 'transaction_by_user'
-        });
-    }
+            ], 
+            queueName: 'transaction_by_user_1'
+        }); 
+    } 
 
     @Post("/create")
     async createPost(@Res() res, @Body() createTransactionDTO: CreateTransactionDTO) {
@@ -39,23 +39,21 @@ export class TransactionsController extends RMQController {
     @Get('/:uuid')
     async getTransactionsByUUID(@Res() res, @Param('uuid') uuid) {
         try {
-            this.send<string, number>('my_exchange2', "ola").then(reply => {
-                console.log(reply)
-            }).catch(function (err) {
-                console.log("Promise  ",err);
-           });
             const Transaction = await this.transactionsService.getTransactionByUUID(uuid);
             if (!Transaction) throw new NotFoundException('Transactions does not exists');
             return res.status(HttpStatus.OK).json(Transaction);
         } catch (err) {
             console.log(err)
-        }
-    }
-
-    @RMQRoute('my_exchange1')
-    sum(numbers: number[]): number {
-        return numbers.reduce((a, b) => a + b, 0);
-    }
+        }   
+    } 
+   
+    @RMQRoute('company_1')
+    async getTransactionByUUID(uuid: string) {
+        console.log("company_1")
+        let data:any;
+        const transactions = await this.transactionsService.getTransactionByUUID(uuid);
+        return transactions.length > 0 ? transactions : "Not found"
+    } 
 
     @Delete('/')
     async deleleTransaction(@Res() res, @Query('TransactionID') TransactionID) {
