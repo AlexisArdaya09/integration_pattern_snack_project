@@ -36,10 +36,11 @@ export class TransactionsController extends RMQController {
         })
     }
 
+    
     @Get('/:uuid')
     async getTransactionsByUUID(@Res() res, @Param('uuid') uuid) {
         try {
-            this.send<string, number>('my_exchange2', "ola").then(reply => {
+            this.send<number[], number>('my_exchange1', [1, 2, 3]).then(reply => {
                 console.log(reply)
             }).catch(function (err) {
                 console.log("Promise  ",err);
@@ -52,9 +53,9 @@ export class TransactionsController extends RMQController {
         }
     }
 
-    @RMQRoute('my_exchange1')
-    sum(numbers: number[]): number {
-        return numbers.reduce((a, b) => a + b, 0);
+    @RMQRoute('my_exchange2')
+    sum(numbers: string): string {
+        return numbers
     }
 
     @Delete('/')
