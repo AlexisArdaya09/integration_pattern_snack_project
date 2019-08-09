@@ -1,6 +1,8 @@
 # Final project -  Integration pattern module
+SNACK is a series of web applications implemented so that customers can check the status of their transactions and various reports. 
+The goal of the implementation is to reduce latency in response and manage the cadence of requests to avoid system outages.
 
-The four projects were developed with the javascript framework NestJS using the "RabbitMQ RPC library" for communication with the RabbitMQ messaging system.
+The four projects were developed with the javascript framework NestJS using the "RabbitMQ RPC library" for communication with the RabbitMQ messaging system. We are using a vertical architecture for the comunications.   
 
 # Container Diagram
 ![image](https://drive.google.com/uc?export=view&id=1LIFyy5H4yR_P77OU7pmmbBg39bN8Tvt8)
