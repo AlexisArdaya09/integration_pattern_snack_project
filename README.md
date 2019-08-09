@@ -2,6 +2,9 @@
 
 The four projects were developed with the javascript framework NestJS using the "RabbitMQ RPC library" for communication with the RabbitMQ messaging system.
 
+# Container Diagram
+![image](https://drive.google.com/uc?export=view&id=1LIFyy5H4yR_P77OU7pmmbBg39bN8Tvt8)
+
 # Projects:
 
 ### Consolidated_company_data
