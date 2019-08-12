@@ -8,7 +8,7 @@ export const TransactionSchema = new Schema({
         default: uuid.v4()
     },
     price: Number,
-    createAt: {
+    date: {
         type: Date,
         default: Date.now
     }

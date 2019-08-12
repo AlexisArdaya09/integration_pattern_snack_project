@@ -48,7 +48,7 @@ export class TransactionsController extends RMQController {
         } 
     } 
 
-    @RMQRoute('company_2')
+    @RMQRoute('company___2')
     async getTransactionByUUID(uuid: string) {
         console.log("company_2")
         let data:any;

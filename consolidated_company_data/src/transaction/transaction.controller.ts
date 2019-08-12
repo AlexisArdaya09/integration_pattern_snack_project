@@ -22,10 +22,28 @@ export class TransactionsController extends RMQController {
     @Get('/:uuid')
     async getTransactionsByUUID(@Res() res, @Param('uuid') uuid) {
         try {
-            this.publishMessage('company_1', uuid);
-            this.publishMessage('company_2', uuid);
-            this.publishMessage('main_company', uuid);
+            let data = [];
+            let responseVerify= [];
+            this.send<string, string>("company___1", uuid).then(reply => {
+                this.responseData(reply,data,responseVerify)  
+            }).catch(function (err) { 
+                console.log("Fallo", err); 
+            });
+            this.send<string, string>("company___2", uuid).then(reply => {
+                this.responseData(reply,data,responseVerify)  
+            }).catch(function (err) { 
+                console.log("Fallo", err); 
+            });
+            this.send<string, string>("main___company", uuid).then(reply => {
+                this.responseData(reply,data,responseVerify)  
+            }).catch(function (err) { 
+                console.log("Fallo", err); 
+            });
             
+            setTimeout(function() {
+                console.log(data)
+            }, 5000);
+        
             const msg = "Message request data sent successfully"
             console.log(msg)
             return res.status(HttpStatus.OK).json({msg});
@@ -34,24 +52,10 @@ export class TransactionsController extends RMQController {
         }
     }
 
-    publishMessage(rooute,uuid){
-        let data = [];
-        let responseVerify= [];
-        this.send<string, string>(rooute, uuid).then(reply => {
-            this.responseData(reply,data,responseVerify)
-            
-        }).catch(function (err) { 
-            console.log("Fallo", err); 
-        });
-    }
-
-    responseData(reply,data, responseVerify){
+    responseData(reply, data, responseVerify){
         if (reply != "Not found"){
             data.push(reply)
             responseVerify.push(true)
-        }
-        if (responseVerify.lenght > 0){
-            console.log(data)
         }
     }
 }
